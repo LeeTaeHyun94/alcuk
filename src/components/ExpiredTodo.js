@@ -5,7 +5,7 @@ import axios from "axios";
 function removeExpiredTodo(seq) {
     axios({
         method: 'delete',
-        url: 'http://localhost:3000/api/todo/' + seq,
+        url: 'http://13.124.186.2:3000/api/todo/' + seq,
         config: { headers: {'Content-Type': 'multipart/form-data' }}
     })
         .then(function (response) {

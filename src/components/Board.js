@@ -7,15 +7,15 @@ import axios from 'axios'
 import Modal from "react-bootstrap/lib/Modal";
 
 function getTodos() {
-    return axios.get('http://localhost:3000/api/todos');
+    return axios.get('http://13.124.186.2:3000/api/todos');
 }
 
 function getExpiredTodos() {
-    return axios.get('http://localhost:3000/api/todos/expired');
+    return axios.get('http://13.124.186.2:3000/api/todos/expired');
 }
 
 function createTodo(contents) {
-    axios.post('http://localhost:3000/api/todo', contents)
+    axios.post('http://13.124.186.2:3000/api/todo', contents)
         .then(function (response) {
             //handle success
             console.log(response);
