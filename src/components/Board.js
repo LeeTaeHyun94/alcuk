@@ -6,38 +6,6 @@ import ExpiredTodo from './ExpiredTodo'
 import axios from 'axios'
 import Modal from "react-bootstrap/lib/Modal";
 
-// const todos = [
-//     {
-//         seq : 0,
-//         title : "TestData",
-//         description : "테스트데이터",
-//         deadline : "2018-11-24T12:59",
-//         priority : 3
-//     },
-//     {
-//         seq : 1,
-//         title : "TestData",
-//         description : "테스트데이터",
-//         deadline : "2018-11-24T12:59",
-//         priority : 1
-//     }
-// ]
-//
-// const expiredTodos = [
-//     {
-//         seq : 2,
-//         title : "안녕하세요",
-//         description : "test",
-//         deadline : "2018-11-24T12:59"
-//     },
-//     {
-//         seq : 3,
-//         title : "안녕하세요dd",
-//         description : "마감",
-//         deadline : "2018-11-24T12:59"
-//     }
-// ]
-
 function getTodos() {
     return axios.get('http://localhost:3000/api/todos');
 }
@@ -47,18 +15,6 @@ function getExpiredTodos() {
 }
 
 function createTodo(contents) {
-    // axios({
-    //     method: 'post',
-    //     url: 'http://localhost:3000/api/todo',
-    //     data: contents,
-    //     config: {
-    //         headers: {
-    //             'Accept': '*/*',
-    //             'Content-Type': 'application/json',
-    //             'Cache-Control': 'no-cache'
-    //         }
-    //     }
-    // })
     axios.post('http://localhost:3000/api/todo', contents)
         .then(function (response) {
             //handle success
@@ -97,11 +53,6 @@ class Board extends Component {
             'deadline': this.cdeadline.value,
             'priority': this.cpriority.value
         };
-        // let bodyFormData = new FormData();
-        // bodyFormData.set('userId', 1);
-        // bodyFormData.set('id', this.cpriority.value);
-        // bodyFormData.set('title', this.ctitle.value);
-        // bodyFormData.set('body', this.cdescription.value);
         createTodo(obj);
     }
     componentDidMount() {
@@ -149,7 +100,7 @@ class Board extends Component {
                                 <div className="panel-body">
                                     <ul className="timeline" id="todoList">
                                         {todos.map((todo) => {
-                                            return <Todo key={todo._id} seq={todo._id} title={todo.title} description={todo.description} deadline={todo.deadline} priority={todo.priority}/>
+                                            return <Todo key={todo._id} seq={todo._id} title={todo.title} description={todo.description} deadline={todo.deadline.slice(0, 16)} priority={todo.priority}/>
                                         })}
                                     </ul>
                                 </div>
@@ -163,7 +114,7 @@ class Board extends Component {
                                 <div className="panel-body">
                                     <ul className="chat" id="expiredList">
                                         {expiredTodos.map((expiredTodo) => {
-                                            return <ExpiredTodo key={expiredTodo._id} seq={expiredTodo._id} title={expiredTodo.title} description={expiredTodo.description} deadline={expiredTodo.deadline}/>
+                                            return <ExpiredTodo key={expiredTodo._id} seq={expiredTodo._id} title={expiredTodo.title} description={expiredTodo.description} deadline={expiredTodo.deadline.slice(0, 16)}/>
                                         })}
                                     </ul>
                                 </div>
