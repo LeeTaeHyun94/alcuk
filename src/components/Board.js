@@ -39,20 +39,27 @@ import Modal from "react-bootstrap/lib/Modal";
 // ]
 
 function getTodos() {
-    return axios.get('https://jsonplaceholder.typicode.com/posts');
+    return axios.get('http://localhost:3000/api/todos');
 }
 
 function getExpiredTodos() {
-    return axios.get('https://jsonplaceholder.typicode.com/comments');
+    return axios.get('http://localhost:3000/api/todos/expired');
 }
 
 function createTodo(contents) {
-    axios({
-        method: 'post',
-        url: 'https://jsonplaceholder.typicode.com/posts',
-        data: contents,
-        config: { headers: {'Content-Type': 'multipart/form-data' }}
-    })
+    // axios({
+    //     method: 'post',
+    //     url: 'http://localhost:3000/api/todo',
+    //     data: contents,
+    //     config: {
+    //         headers: {
+    //             'Accept': '*/*',
+    //             'Content-Type': 'application/json',
+    //             'Cache-Control': 'no-cache'
+    //         }
+    //     }
+    // })
+    axios.post('http://localhost:3000/api/todo', contents)
         .then(function (response) {
             //handle success
             console.log(response);
@@ -84,12 +91,18 @@ class Board extends Component {
     }
     createTodo = (e) => {
         e.preventDefault();
-        let bodyFormData = new FormData();
-        bodyFormData.set('userId', 1);
-        bodyFormData.set('id', this.cpriority.value);
-        bodyFormData.set('title', this.ctitle.value);
-        bodyFormData.set('body', this.cdescription.value);
-        createTodo(bodyFormData);
+        let obj = {
+            'title': this.ctitle.value,
+            'description': this.cdescription.value,
+            'deadline': this.cdeadline.value,
+            'priority': this.cpriority.value
+        };
+        // let bodyFormData = new FormData();
+        // bodyFormData.set('userId', 1);
+        // bodyFormData.set('id', this.cpriority.value);
+        // bodyFormData.set('title', this.ctitle.value);
+        // bodyFormData.set('body', this.cdescription.value);
+        createTodo(obj);
     }
     componentDidMount() {
         this.fetchTodosInfo();
@@ -136,7 +149,7 @@ class Board extends Component {
                                 <div className="panel-body">
                                     <ul className="timeline" id="todoList">
                                         {todos.map((todo) => {
-                                            return <Todo key={todo.id} seq={todo.id} title={todo.title} description={todo.description} deadline={todo.deadline} priority={todo.priority}/>
+                                            return <Todo key={todo._id} seq={todo._id} title={todo.title} description={todo.description} deadline={todo.deadline} priority={todo.priority}/>
                                         })}
                                     </ul>
                                 </div>
@@ -150,7 +163,7 @@ class Board extends Component {
                                 <div className="panel-body">
                                     <ul className="chat" id="expiredList">
                                         {expiredTodos.map((expiredTodo) => {
-                                            return <ExpiredTodo key={expiredTodo.id} seq={expiredTodo.id} title={expiredTodo.title} description={expiredTodo.description} deadline={expiredTodo.deadline}/>
+                                            return <ExpiredTodo key={expiredTodo._id} seq={expiredTodo._id} title={expiredTodo.title} description={expiredTodo.description} deadline={expiredTodo.deadline}/>
                                         })}
                                     </ul>
                                 </div>

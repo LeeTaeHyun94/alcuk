@@ -5,7 +5,7 @@ import axios from "axios";
 function removeExpiredTodo(seq) {
     axios({
         method: 'delete',
-        url: 'https://jsonplaceholder.typicode.com/comments/' + seq,
+        url: 'http://localhost:3000/api/todo/' + seq,
         config: { headers: {'Content-Type': 'multipart/form-data' }}
     })
         .then(function (response) {

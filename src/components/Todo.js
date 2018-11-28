@@ -6,16 +6,12 @@ import Button from "react-bootstrap/lib/Button"
 import axios from "axios"
 
 function getTodo(seq) {
-    return axios.get('https://jsonplaceholder.typicode.com/posts/' + seq);
+    console.log(seq);
+    return axios.get('http://localhost:3000/api/todo/' + seq);
 }
 
 function modifyTodo(contents, seq) {
-    axios({
-        method: 'put',
-        url: 'https://jsonplaceholder.typicode.com/posts/' + seq,
-        data: contents,
-        config: { headers: {'Content-Type': 'multipart/form-data' }}
-    })
+    axios.patch('http://localhost:3000/api/todo/' + seq, contents)
         .then(function (response) {
             //handle success
             console.log(response);
@@ -25,12 +21,27 @@ function modifyTodo(contents, seq) {
             //handle error
             console.log(response);
         });
+    // axios({
+    //     method: 'patch',
+    //     url: 'http://localhost:3000/api/todo/' + seq,
+    //     data: contents,
+    //     config: { headers: {'Content-Type': 'multipart/form-data' }}
+    // })
+    //     .then(function (response) {
+    //         //handle success
+    //         console.log(response);
+    //         window.location.reload();
+    //     })
+    //     .catch(function (response) {
+    //         //handle error
+    //         console.log(response);
+    //     });
 }
 
 function removeTodo(seq) {
     axios({
         method: 'delete',
-        url: 'https://jsonplaceholder.typicode.com/posts/' + seq,
+        url: 'http://localhost:3000/api/todo/' + seq,
         config: { headers: {'Content-Type': 'multipart/form-data' }}
     })
         .then(function (response) {
@@ -55,20 +66,31 @@ class Todo extends Component {
             fetching: false,
         });
         // console.log(this.state.todo.title + " " + this.state.todo.body + " " + this.state.todo.id);
-        this.useq.value = this.state.todo.id;
-        this.utitle.value = this.state.todo.title;
-        this.udescription.value = this.state.todo.body;
-        this.upriority.value = this.state.todo.id;
+        // console.log(this.state);
+        // console.log(this.state.todo);
+        // console.log(this.state.todo._id);
+        this.useq.value = this.state.todo[0]._id;
+        this.utitle.value = this.state.todo[0].title;
+        this.udescription.value = this.state.todo[0].description;;
+        this.upriority.value = this.state.todo[0].priority;
+        // this.udeadline.value = this.state.todo[0].deadline;
+        this.udeadline.value = this.state.todo[0].deadline.slice(0, 16);
     }
 
     updateTodo = (e) => {
         e.preventDefault();
-        let bodyFormData = new FormData();
-        bodyFormData.set('userId', this.upriority.value);
-        bodyFormData.set('id', this.useq.value);
-        bodyFormData.set('title', this.utitle.value);
-        bodyFormData.set('body', this.udescription.value);
-        modifyTodo(bodyFormData, this.useq.value);
+        let obj = {
+            "title": this.utitle.value,
+            "description": this.udescription.value,
+            "deadline": this.udeadline.value,
+            "priority": this.upriority.value
+        }
+        // let bodyFormData = new FormData();
+        // bodyFormData.set('userId', this.upriority.value);
+        // bodyFormData.set('id', this.useq.value);
+        // bodyFormData.set('title', this.utitle.value);
+        // bodyFormData.set('body', this.udescription.value);
+        modifyTodo(obj, this.useq.value);
     }
 
     deleteTodo = (seq, e) => {
@@ -80,6 +102,7 @@ class Todo extends Component {
         e.preventDefault();
         this.setState({showUpdateModal:true});
         this.fetchTodoInfo(seq);
+        // conso
     }
 
     handleUpdateModalClose() {
